@@ -27,6 +27,7 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'padawan-php/deoplete-padawan'
 Plug 'iamcco/markdown-preview.vim'
+Plug 'tpope/vim-surround'
 call plug#end()
 
 "CONFIGS NVIM
