@@ -14,12 +14,15 @@ Plug 'mattn/emmet-vim'
 Plug 'ap/vim-buftabline'
 Plug 'scrooloose/nerdcommenter'
 Plug 'vim-syntastic/syntastic'
-Plug 'tpope/vim-fugitive'
+"Plug 'tpope/vim-fugitive'
+Plug 'neoclide/vim-easygit'
 Plug 'Yggdroot/indentLine'
 Plug 'junegunn/vim-easy-align'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'itchyny/lightline.vim'
+"Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline-themes'
 Plug 'elentok/plaintasks.vim'
 Plug 'scrooloose/nerdtree-git-plugin'
 Plug 'matze/vim-move'
@@ -64,6 +67,11 @@ set autochdir "para dar path complete com o deoplete
 let mapleader="\<space>"
 let g:indentLine_setColors = 0
 
+set guicursor=n-v-c:block-Cursor
+set guicursor+=i:ver100-iCursor
+set guicursor+=n-v-c:blinkon0
+set guicursor+=i:blinkwait10
+
 " j/k will move virtual lines (lines that wrap)
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
@@ -93,8 +101,10 @@ nnoremap <S-Up> :m-2<CR>
 nnoremap <S-Down> :m+<CR>
 inoremap <S-Up> <Esc>:m-2<CR>
 inoremap <S-Down> <Esc>:m+<CR>
+
+
 map <CR> o<ESC>
-map <S-CR> O<ESC>
+"nnoremap <leader><leader> o<ESC>
 imap <C-S> <ESC>:w<CR>a
 map  <C-S> :w<CR>a
 
@@ -113,7 +123,6 @@ noremap <leader>w :bn<CR>
 
 vnoremap > >gv
 vnoremap < <gv
-
 
 autocmd QuickFixCmdPost *grep* cwindow
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -136,8 +145,8 @@ nnoremap <silent> <F2> :NERDTreeFind<CR>
 map <C-b> :NERDTreeToggle<CR>
 
 """BUffertabs
-let g:buftabline_show=2
-
+"let g:buftabline_show=2
+let g:tablineclosebutton=1
 
 " jsx
 let g:jsx_ext_required = 0
@@ -164,6 +173,9 @@ let g:gruvbox_contrast_dark = 'hard'
 let g:syntastic_php_checkers = ['php']
 let g:syntastic_javascript_checkers=['eslint']
 let g:syntastic_rust_checkers = ['rustc']
+
+"let g:airline#extensions#tabline#enabled = 1
+let g:easygit_enable_command = 1
 
 let g:lightline = {
       \ 'colorscheme': 'wombat',
