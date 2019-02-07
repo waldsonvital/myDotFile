@@ -10,7 +10,6 @@ Plug 'scrooloose/nerdtree'
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-buftabline'
 Plug 'scrooloose/nerdcommenter'
-Plug 'vim-syntastic/syntastic'
 Plug 'tpope/vim-fugitive'
 Plug 'Yggdroot/indentLine'
 Plug 'junegunn/vim-easy-align'
@@ -18,23 +17,29 @@ Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'itchyny/lightline.vim'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
-Plug 'elentok/plaintasks.vim'
 Plug 'scrooloose/nerdtree-git-plugin'
 Plug 'matze/vim-move'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'SirVer/ultisnips'
-Plug 'Valloric/YouCompleteMe'
+"Plug 'Valloric/YouCompleteMe'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 Plug 'valloric/MatchTagAlways'
 Plug 'tpope/vim-surround'
 Plug 'lilydjwg/colorizer'
 Plug 'universal-ctags/ctags'
-Plug 'mhartington/oceanic-next'
 Plug 'othree/yajs.vim'
 Plug 'othree/html5.vim'
-Plug 'joshdick/onedark.vim'
 Plug 'StanAngeloff/php.vim'
 Plug 'shawncplus/phpcomplete.vim'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'mkusher/padawan.vim'
+Plug 'rakr/vim-one'
 Plug 'junegunn/goyo.vim' "free distraction mode :Goyo
+Plug 'w0rp/ale'
+Plug 'maximbaz/lightline-ale'
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'dart-lang/dart-vim-plugin'
+Plug 'natebosch/vim-lsc'
 call plug#end()
 
 if (has("termguicolors"))
@@ -44,24 +49,22 @@ endif
 "CONFIGS NVIM
 syntax enable
 filetype plugin indent on
-"colorscheme OceanicNext
-"colorscheme gruvbox
-colorscheme PaperColor
-"colorscheme onedark
-"set background=dark
-set background=light
+set termguicolors     " enable true colors support
+
+colorscheme Gruvbox
+"colorscheme PaperColor
+set background=dark
 set foldmethod=syntax
-"set nofoldenable
 set foldnestmax=2
 set foldlevel=1
 set encoding=UTF-8
-set hidden
 set number
 set mouse=a
 set inccommand=split
 set tabstop=4
 set softtabstop=0
 set shiftwidth=4
+set linespace=3
 set sw=4
 set expandtab
 set cursorline
@@ -80,17 +83,23 @@ set backupdir=~/.config/nvim/backup//
 set directory=~/.config/nvim/swap//
 set undodir=~/./config/nvim/undo//
 set showmatch
-
+set nolist
 set autochdir "para dar path complete com o deoplete
 
-let mapleader="\<space>"
+"let mapleader="\<space>"
+let mapleader=";"
 let g:indentLine_setColors = 0
+let $PATH=$PATH . ':' . expand('~/.composer/vendor/bin')
 
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
 set guicursor+=i:blinkwait10
 set statusline+=%F
+
+if has("gui_running")
+    set antialias
+end
 
 hi htmlArg gui=italic cterm=italic
 hi Comment gui=italic cterm=italic
@@ -114,11 +123,14 @@ nmap <silent> <c-l> :wincmd l<CR>
 nnoremap <leader>ev :vsplit ~/.config/nvim/init.vim<cr>
 nnoremap <leader>sv :source ~/.config/nvim/init.vim<cr>
 
-nnoremap <c-p> :Files<cr>
-nnoremap <c-f> :Ag<space>
+nnoremap <c-b> :CtrlPBuffer<cr>
+"nnoremap <c-f> :Ag<space>
 
 "seleciona tudo
 noremap <C-a> <esc>ggVG<CR>
+
+"GOTO YOUCOMPLETEME
+"nnoremap <leader>jd :YcmCompleter GoTo<CR>
 
 "nnoremap <leader>ff gg=G<CR>
 
@@ -154,8 +166,16 @@ vnoremap < <gv
 autocmd QuickFixCmdPost *grep* cwindow
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 
-"config deoplete
-let g:deoplete#enable_at_startup = 1
+let g:ale_completion_enabled = 1
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
+
+let g:lsc_server_commands = {'dart': 'dart_language_server'}
+
+let g:mta_use_matchparen_group = 1
+
+let g:ycm_global_ycm_extra_conf = '~/.config/nvim/.ycm_extra_conf.py'
 
 let g:move_key_modifier = 'D'
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -163,6 +183,7 @@ let g:UltiSnipsExpandTrigger="<c-j>"
 let g:buftabline_numbers = 1
 let g:buftabline_indicators = 1
 let g:buftabline_separators = 1
+
 "" NERDTree configuration
 let g:NERDTreeChDirMode=2
 let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
@@ -173,13 +194,13 @@ let g:NERDTreeWinSize = 50
 let g:NERDTreeShowHidden=1
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 nnoremap <silent> <F2> :NERDTreeFind<CR>
-map <C-b> :NERDTreeToggle<CR>
+map <C-n> :NERDTreeToggle<CR>
 "autocmd VimEnter * silent NERDTree | wincmd p
 
 let g:phpcd_php_cli_executable = 'php'
 
 """BUffertabs
-"let g:buftabline_show=2
+let g:buftabline_show=2
 
 " jsx
 let g:jsx_ext_required = 0
@@ -193,23 +214,26 @@ let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsSnippetsDir='~/.config/nvim/UltiSnips'
 
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
+
 set statusline+=%*
 
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"let g:gruvbox_contrast_dark = 'hard'
+let g:enable_bold_font = 1
+let g:enable_italic_font = 1
+if (has("nvim"))
+  "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
 
-let g:gruvbox_contrast_dark = 'hard'
-
-let g:syntastic_php_checkers = ['php']
-let g:syntastic_javascript_checkers=['eslint']
-let g:syntastic_rust_checkers = ['rustc']
+"For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+"Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+" < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+if (has("termguicolors"))
+  set termguicolors
+endif
 
 "let g:airline#extensions#tabline#enabled = 1
 let g:easygit_enable_command = 1
-
 
 let g:mta_filetypes = {
     \ 'js' : 1,
@@ -232,11 +256,12 @@ augroup phpSyntaxOverride
 augroup END
 
 let g:lightline = {
+      \ 'enable': { 'tabline': 1 },
       \ 'colorscheme': 'wombat',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
-      \   'right': [['lineinfo', 'syntastic'],
+      \   'right': [['lineinfo'],
       \             ['fileformat','filetype', 'fileencoding']]
       \ },
       \ 'component_function': {
@@ -245,3 +270,44 @@ let g:lightline = {
       \ },
       \ }
 
+
+""********* COC AUTO COMPLETE *************""
+" if hidden not set, TextEdit might fail.
+set hidden
+
+" Better display for messages
+set cmdheight=2
+
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
+" always show signcolumns
+set signcolumn=yes
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use <c-space> for trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+""********** FIM COC **********************""
