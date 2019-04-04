@@ -5,6 +5,7 @@ Plug 'morhetz/gruvbox'
 Plug 'sheerun/vim-polyglot'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "busca em palavra dentro do arquivo precisa do https://github.com/ggreer/the_silver_searcher instalado
 Plug 'junegunn/fzf.vim'
+Plug 'elentok/plaintasks.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
 Plug 'mattn/emmet-vim'
@@ -18,7 +19,6 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'itchyny/lightline.vim'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
 Plug 'scrooloose/nerdtree-git-plugin'
-Plug 'matze/vim-move'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'SirVer/ultisnips'
 "Plug 'Valloric/YouCompleteMe'
@@ -86,8 +86,7 @@ set showmatch
 set nolist
 set autochdir "para dar path complete com o deoplete
 
-"let mapleader="\<space>"
-let mapleader=";"
+let mapleader="\<space>"
 let g:indentLine_setColors = 0
 let $PATH=$PATH . ':' . expand('~/.composer/vendor/bin')
 
@@ -96,6 +95,10 @@ set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
 set guicursor+=i:blinkwait10
 set statusline+=%F
+
+let g:better_whitespace_enable = 1
+let g:strip_whitespace_on_save = 1
+let g:strip_whitespace_confirm = 0
 
 if has("gui_running")
     set antialias
@@ -124,26 +127,23 @@ nnoremap <leader>ev :vsplit ~/.config/nvim/init.vim<cr>
 nnoremap <leader>sv :source ~/.config/nvim/init.vim<cr>
 
 nnoremap <c-b> :CtrlPBuffer<cr>
-"nnoremap <c-f> :Ag<space>
+nnoremap <c-f> :Ag<space>
 
 "seleciona tudo
 noremap <C-a> <esc>ggVG<CR>
 
-"GOTO YOUCOMPLETEME
-"nnoremap <leader>jd :YcmCompleter GoTo<CR>
-
-"nnoremap <leader>ff gg=G<CR>
-
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
-nnoremap <S-Up> :m-2<CR>
-nnoremap <S-Down> :m+<CR>
-inoremap <S-Up> <Esc>:m-2<CR>
-inoremap <S-Down> <Esc>:m+<CR>
 
+"move linhas
+nnoremap <S-Down> :m .+1<CR>==
+nnoremap <S-Up> :m .-2<CR>==
+inoremap <S-Down> <Esc>:m .+1<CR>==gi
+inoremap <S-Up> <Esc>:m .-2<CR>==gi
+vnoremap <S-Down> :m '>+1<CR>gv=gv
+vnoremap <S-Up> :m '<-2<CR>gv=gv
 
 map <CR> o<ESC>
-"nnoremap <leader><leader> o<ESC>
 imap <C-S> <ESC>:w<CR>a
 map  <C-S> :w<CR>a
 
@@ -177,7 +177,6 @@ let g:mta_use_matchparen_group = 1
 
 let g:ycm_global_ycm_extra_conf = '~/.config/nvim/.ycm_extra_conf.py'
 
-let g:move_key_modifier = 'D'
 let g:UltiSnipsExpandTrigger="<c-j>"
 
 let g:buftabline_numbers = 1
@@ -293,8 +292,25 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
 " Use <c-space> for trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> for confirm completion.
+" Coc only does snippet and additional edit on confirm.
+"inoremap <expr> <cr> pumvisible() ? \"\<C-y>" : \"\<C-g>u\<CR>"
 
 " Use K for show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
