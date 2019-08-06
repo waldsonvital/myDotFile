@@ -1,21 +1,14 @@
 {
     "languageserver": {
         "dart": {
-            "command": "dart_language_server",
-            "args": [],
+            "command": "dart",
+            "args": [
+                "/usr/local/opt/dart/libexec/bin/snapshots/analysis_server.dart.snapshot",
+                "--lsp"
+            ],
             "filetypes": ["dart"],
-            "initializationOptions": {},
-            "settings": {
-                "dart": {
-                    "validation": {},
-                    "completion": {}
-                }
-            }
-        },
-        "phplang": {
-            "command": "php",
-            "args": ["/Users/waldsonvital/.composer/vendor/felixfbecker/language-server/bin/php-language-server.php"],
-            "filetypes": ["php"]
+            "disableDynamicRegister": true,
+            "trace.server": "verbose"
         }
     },
     "java.errors.incompleteClasspath.severity": "ignore"

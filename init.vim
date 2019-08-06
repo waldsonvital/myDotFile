@@ -47,6 +47,7 @@ Plug 'maximbaz/lightline-ale'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'dart-lang/dart-vim-plugin'
 Plug 'natebosch/vim-lsc'
+Plug 'pangloss/vim-javascript'
 call plug#end()
 
 if (has("termguicolors"))
