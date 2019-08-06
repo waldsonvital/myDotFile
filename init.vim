@@ -46,7 +46,7 @@ Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'dart-lang/dart-vim-plugin'
-Plug 'natebosch/vim-lsc'
+"Plug 'natebosch/vim-lsc'
 Plug 'pangloss/vim-javascript'
 call plug#end()
 
@@ -188,12 +188,13 @@ vnoremap < <gv
 autocmd QuickFixCmdPost *grep* cwindow
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 
-let g:ale_completion_enabled = 1
+"let g:ale_completion_enabled = 1
 let g:ale_linters = {
 \   'javascript': ['eslint'],
+\   'dart': ['ale-dart-dartanalyzer'],
 \}
 
-let g:lsc_server_commands = {'dart': 'dart_language_server'}
+"let g:lsc_server_commands = {'dart': 'dart_language_server'}
 
 let g:mta_use_matchparen_group = 1
 
