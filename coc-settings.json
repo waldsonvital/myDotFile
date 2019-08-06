@@ -17,5 +17,6 @@
             "args": ["/Users/waldsonvital/.composer/vendor/felixfbecker/language-server/bin/php-language-server.php"],
             "filetypes": ["php"]
         }
-    }
+    },
+    "java.errors.incompleteClasspath.severity": "ignore"
 }

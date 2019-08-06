@@ -18,11 +18,16 @@ Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'itchyny/lightline.vim'
 Plug 'captbaritone/better-indent-support-for-php-with-html'
-Plug 'scrooloose/nerdtree-git-plugin'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+"Plug 'Shougo/denite.nvim'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'SirVer/ultisnips'
 "Plug 'Valloric/YouCompleteMe'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Or build from source code
+" Install yarn from https://yarnpkg.com
+Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-denite'
 Plug 'valloric/MatchTagAlways'
 Plug 'tpope/vim-surround'
 Plug 'lilydjwg/colorizer'
@@ -32,6 +37,8 @@ Plug 'othree/html5.vim'
 Plug 'StanAngeloff/php.vim'
 Plug 'shawncplus/phpcomplete.vim'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'arcticicestudio/nord-vim'
+Plug 'mhartington/oceanic-next'
 Plug 'mkusher/padawan.vim'
 Plug 'rakr/vim-one'
 Plug 'junegunn/goyo.vim' "free distraction mode :Goyo
@@ -50,7 +57,7 @@ endif
 syntax enable
 filetype plugin indent on
 set termguicolors     " enable true colors support
-
+set t_Co=256
 colorscheme Gruvbox
 "colorscheme PaperColor
 set background=dark
@@ -85,10 +92,12 @@ set undodir=~/./config/nvim/undo//
 set showmatch
 set nolist
 set autochdir "para dar path complete com o deoplete
+set redrawtime=10000
 
 let mapleader="\<space>"
 let g:indentLine_setColors = 0
 let $PATH=$PATH . ':' . expand('~/.composer/vendor/bin')
+let &colorcolumn="120,".join(range(400,999),",")
 
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-iCursor
@@ -111,6 +120,18 @@ hi Comment gui=italic cterm=italic
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
 noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
 
+"increment and decrement numbers
+function! AddSubtract(char, back)
+  let pattern = &nrformats =~ 'alpha' ? '[[:alpha:][:digit:]]' : '[[:digit:]]'
+  call search(pattern, 'cw' . a:back)
+  execute 'normal! ' . v:count1 . a:char
+  silent! call repeat#set(":\<C-u>call AddSubtract('" .a:char. "', '" .a:back. "')\<CR>")
+endfunction
+nnoremap <silent>         <C-a> :<C-u>call AddSubtract("\<C-a>", '')<CR>
+nnoremap <silent> <Leader><C-a> :<C-u>call AddSubtract("\<C-a>", 'b')<CR>
+nnoremap <silent>         <C-x> :<C-u>call AddSubtract("\<C-x>", '')<CR>
+nnoremap <silent> <Leader><C-x> :<C-u>call AddSubtract("\<C-x>", 'b')<CR>
+
 " Close the documentation window when completion is done
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 "corregindoidentação html
@@ -130,7 +151,7 @@ nnoremap <c-b> :CtrlPBuffer<cr>
 nnoremap <c-f> :Ag<space>
 
 "seleciona tudo
-noremap <C-a> <esc>ggVG<CR>
+"noremap <C-a> <esc>ggVG<CR>
 
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
