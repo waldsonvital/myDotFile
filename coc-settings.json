@@ -11,5 +11,13 @@
             "trace.server": "verbose"
         }
     },
-    "java.errors.incompleteClasspath.severity": "ignore"
+    "coc.preferences.rootPatterns":[
+        ".vim",
+        ".git",
+        ".hg",
+        ".projections.json",
+        "package.json",
+        ".vscode",
+        ".packages"
+    ]
 }
