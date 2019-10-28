@@ -42,6 +42,8 @@ Plug 'maximbaz/lightline-ale'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'pangloss/vim-javascript'
 Plug 'airblade/vim-rooter'
+Plug 'calviken/vim-gdscript3'
+"Plug 'dart-lang/dart-vim-plugin'
 call plug#end()
 
 if (has("termguicolors"))
@@ -54,8 +56,8 @@ filetype plugin indent on
 set termguicolors     " enable true colors support
 set t_Co=256
 "colorscheme falcon
-colorscheme PaperColor
-set background=light
+colorscheme Gruvbox
+set background=dark
 set foldmethod=syntax
 set foldnestmax=2
 set foldlevel=1
@@ -189,7 +191,6 @@ autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
 "let g:ale_completion_enabled = 1
 let g:ale_linters = {
 \   'javascript': ['eslint'],
-\   'dart': ['ale-dart-dartanalyzer'],
 \}
 
 "let g:lsc_server_commands = {'dart': 'dart_language_server'}
@@ -339,10 +340,12 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Or use `complete_info` if your vim support it, like:
+" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" Use `[c` and `]c` to navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
@@ -388,10 +391,16 @@ nmap <leader>ac  <Plug>(coc-codeaction)
 " Fix autofix problem of current line
 nmap <leader>qf  <Plug>(coc-fix-current)
 
-" Use <tab> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-nmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
+" Create mappings for function text object, requires document symbols feature of languageserver.
+
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+nmap <silent> <C-d> <Plug>(coc-range-select)
+xmap <silent> <C-d> <Plug>(coc-range-select)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')

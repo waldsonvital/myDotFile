@@ -14,10 +14,13 @@
     "coc.preferences.rootPatterns":[
         ".vim",
         ".git",
+        "vendor",
         ".hg",
         ".projections.json",
         "package.json",
         ".vscode",
         ".packages"
-    ]
+    ],
+    "suggest.removeDuplicateItems": true,
+    "java.errors.incompleteClasspath.severity": "ignore"
 }
