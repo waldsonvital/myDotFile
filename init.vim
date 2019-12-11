@@ -102,10 +102,10 @@ set guicursor+=n-v-c:blinkon0
 set guicursor+=i:blinkwait10
 set statusline+=%F
 
-let g:better_whitespace_enable = 1
-let g:strip_whitespace_on_save = 1
+let g:better_whitespace_enabled=1
+let g:strip_whitespace_on_save=1
 let g:strip_whitespace_confirm = 0
-
+let g:strip_max_file_size = 5000
 let g:falcon_lightline = 1
 
 if has("gui_running")
@@ -116,6 +116,7 @@ hi htmlArg gui=italic cterm=italic
 hi Comment gui=italic cterm=italic
 
 autocmd BufEnter * :syntax sync fromstart
+"au BufNewFile,BufRead *.ejs set filetype=html
 
 " j/k will move virtual lines (lines that wrap)
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -200,7 +201,6 @@ let g:ale_linters = {
 "let g:lsc_auto_map = v:true " Use defaults
 
 let g:mta_use_matchparen_group = 1
-
 let g:ycm_global_ycm_extra_conf = '~/.config/nvim/.ycm_extra_conf.py'
 
 let g:UltiSnipsExpandTrigger="<c-j>"
