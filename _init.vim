@@ -1,22 +1,25 @@
 "PLUGINS
 "
-call plug#begin()
+"call plug#begin()
+call plug#begin('~/.config/nvim/plugged')
 Plug 'morhetz/gruvbox'
 Plug 'sheerun/vim-polyglot'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } "busca em palavra dentro do arquivo precisa do https://github.com/ggreer/the_silver_searcher instalado
 Plug 'junegunn/fzf.vim'
+Plug 'elentok/plaintasks.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'preservim/nerdcommenter'
 Plug 'mattn/emmet-vim'
 Plug 'ap/vim-buftabline'
+Plug 'scrooloose/nerdcommenter'
 Plug 'tpope/vim-fugitive'
 Plug 'Yggdroot/indentLine'
 Plug 'junegunn/vim-easy-align'
 Plug 'airblade/vim-gitgutter'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'itchyny/lightline.vim'
+Plug 'captbaritone/better-indent-support-for-php-with-html'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'SirVer/ultisnips'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -24,13 +27,25 @@ Plug 'valloric/MatchTagAlways'
 Plug 'tpope/vim-surround'
 Plug 'lilydjwg/colorizer'
 Plug 'universal-ctags/ctags'
+Plug 'othree/yajs.vim'
 Plug 'othree/html5.vim'
+"Plug 'StanAngeloff/php.vim'
+"Plug 'shawncplus/phpcomplete.vim'
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'arcticicestudio/nord-vim'
 Plug 'mhartington/oceanic-next'
+Plug 'mkusher/padawan.vim'
+Plug 'rakr/vim-one'
+Plug 'junegunn/goyo.vim' "free distraction mode :Goyo
+Plug 'fenetikm/falcon'
+Plug 'w0rp/ale'
+Plug 'maximbaz/lightline-ale'
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'pangloss/vim-javascript'
 Plug 'airblade/vim-rooter'
 Plug 'calviken/vim-gdscript3'
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
+"Plug 'dart-lang/dart-vim-plugin'
+Plug 'sainnhe/edge'
 call plug#end()
 
 if (has("termguicolors"))
@@ -38,12 +53,13 @@ if (has("termguicolors"))
 endif
 
 "CONFIGS NVIM
-syntax enable
+"syntax enable
 filetype plugin indent on
 set termguicolors     " enable true colors support
 set t_Co=256
-
-colorscheme Gruvbox
+"colorscheme falcon
+"colorscheme Gruvbox
+colorscheme edge
 set background=dark
 set foldmethod=syntax
 set foldnestmax=2
@@ -64,12 +80,15 @@ set linebreak
 set nolist  " list disables linebreak
 set laststatus=2
 set ruler
-
 " Searching
 set hlsearch
 set incsearch
 set ignorecase
-set smartcase
+"set smartcase
+
+"c++ configs
+set exrc
+set secure
 
 set backupdir=~/.config/nvim/backup//
 set directory=~/.config/nvim/swap//
@@ -94,14 +113,20 @@ let g:better_whitespace_enabled=1
 let g:strip_whitespace_on_save=1
 let g:strip_whitespace_confirm = 0
 let g:strip_max_file_size = 5000
+let g:falcon_lightline = 1
 
-let g:vim_markdown_folding_disabled = 1
+"edge theme style
+let g:edge_style = 'neon'
 
+if has("gui_running")
+    set antialias
+end
 
 hi htmlArg gui=italic cterm=italic
 hi Comment gui=italic cterm=italic
 
 autocmd BufEnter * :syntax sync fromstart
+"au BufNewFile,BufRead *.ejs set filetype=html
 
 " j/k will move virtual lines (lines that wrap)
 noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
@@ -114,11 +139,15 @@ function! AddSubtract(char, back)
   execute 'normal! ' . v:count1 . a:char
   silent! call repeat#set(":\<C-u>call AddSubtract('" .a:char. "', '" .a:back. "')\<CR>")
 endfunction
-
 nnoremap <silent>         <C-a> :<C-u>call AddSubtract("\<C-a>", '')<CR>
 nnoremap <silent> <Leader><C-a> :<C-u>call AddSubtract("\<C-a>", 'b')<CR>
 nnoremap <silent>         <C-x> :<C-u>call AddSubtract("\<C-x>", '')<CR>
 nnoremap <silent> <Leader><C-x> :<C-u>call AddSubtract("\<C-x>", 'b')<CR>
+
+" Close the documentation window when completion is done
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+"corregindoidentação html
+"au BufEnter,BufNew *.php :set filetype=html
 
 " navigate split screens easily
 nmap <silent> <c-k> :wincmd k<CR>
@@ -169,14 +198,21 @@ vnoremap < <gv
 
 autocmd QuickFixCmdPost *grep* cwindow
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 
 "let g:ale_completion_enabled = 1
-"let g:ale_linters = {
-"\   'javascript': ['eslint'],
-"\}
+let g:ale_linters = {
+\   'javascript': ['eslint'],
+\}
 
-let g:coc_node_path = '~/.nvm/versions/node/v13.11.0/bin/node'
+let b:ale_linters = {
+\   'javascript': ['eslint'],
+\}
+
+"let g:lsc_server_commands = {'dart': 'dart_language_server'}
+"let dart_style_guide = 4
+"let dart_format_on_save = 0
+"let g:lsc_server_commands = {'dart': 'dart /usr/local/opt/dart/libexec/bin/snapshots/analysis_server.dart.snapshot --lsp'}
+"let g:lsc_auto_map = v:true " Use defaults
 
 let g:mta_use_matchparen_group = 1
 let g:ycm_global_ycm_extra_conf = '~/.config/nvim/.ycm_extra_conf.py'
@@ -198,6 +234,9 @@ let g:NERDTreeShowHidden=1
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
 nnoremap <silent> <F2> :NERDTreeFind<CR>
 map <C-n> :NERDTreeToggle<CR>
+"autocmd VimEnter * silent NERDTree | wincmd p
+
+let g:phpcd_php_cli_executable = 'php'
 
 """BUffertabs
 let g:buftabline_show=2
@@ -217,9 +256,9 @@ set statusline+=%#warningmsg#
 
 set statusline+=%*
 
+"let g:gruvbox_contrast_dark = 'hard'
 let g:enable_bold_font = 1
 let g:enable_italic_font = 1
-
 if (has("nvim"))
   "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
@@ -229,23 +268,37 @@ endif
 "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
 " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
 if (has("termguicolors"))
-  set termguicolors
+    set termguicolors
 endif
 
+
+"let g:airline#extensions#tabline#enabled = 1
 let g:easygit_enable_command = 1
 
-"""\ 'php' : 1,
 let g:mta_filetypes = {
     \ 'js' : 1,
+    \ 'php' : 1,
     \ 'html' : 1,
     \ 'xhtml' : 1,
     \ 'xml' : 1,
     \ 'jinja' : 1,
     \}
 
+function! PhpSyntaxOverride()
+  " Put snippet overrides in this function.
+  hi! link phpDocTags phpDefine
+  hi! link phpDocParam phpType
+endfunction
+
+augroup phpSyntaxOverride
+  autocmd!
+  autocmd FileType php call PhpSyntaxOverride()
+augroup END
+
+"let g:lightline.colorscheme = 'falcon'
 let g:lightline = {
       \ 'enable': { 'tabline': 1 },
-      \ 'colorscheme': 'powerline',
+      \ 'colorscheme': 'edge',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
